@@ -2,6 +2,7 @@
 
 import { ReactNode } from "react";
 import { CssBaseline, ThemeProvider, createTheme } from "@mui/material";
+import Navbar from "@/layouts/navbar";
 
 const theme = createTheme({
   palette: {
@@ -15,7 +16,8 @@ export default function ThemeRegistry({ children }: { children: ReactNode }) {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      {children}
+      <Navbar />
+      <div>{children}</div>
     </ThemeProvider>
   );
 }

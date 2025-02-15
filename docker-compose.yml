@@ -7,11 +7,4 @@ services:
       context: .
       dockerfile: Dockerfile
     ports:
-      - "3000:3000"
-    volumes:
-      - .:/app
-      - /app/node_modules
-    environment:
-      - NODE_ENV=development
-      - NEXT_PUBLIC_API_BASE_URL=http://localhost:4000/api
-    command: yarn dev
+      - "80:3000"
