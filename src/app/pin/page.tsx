@@ -5,10 +5,14 @@ import { useRouter } from "next/navigation";
 import { Box, Typography, Avatar, Button, Grid, IconButton, Link } from "@mui/material";
 import BackspaceIcon from "@mui/icons-material/Backspace";
 import colors from "@/styles/colors";
+import { fetchUser } from "@/api/user";
+import { useUserStore } from "@/store/useUserStore";
+import { route } from "@/constants";
 
 export default function PinPage() {
   const router = useRouter();
   const [pin, setPin] = useState<string>("");
+  const { setUser } = useUserStore.getState();
 
   const handleKeyPress = (value: string) => {
     if (pin.length < 6) {
@@ -20,9 +24,16 @@ export default function PinPage() {
     setPin((prev) => prev.slice(0, -1));
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (pin === "123456") {
-      router.push("/bank_main");
+      const userId = "000018b0e1a211ef95a30242ac180002";
+      const response = await fetchUser(userId);
+      if (response?.status === 200) {
+        setUser(response.data ?? null);
+        router.replace(route.page.myPocket);
+      } else {
+        alert("Error: User not found or data is invalid.");
+      }
     } else {
       alert("Invalid PIN Code. Try again.");
       setPin("");
@@ -44,13 +55,6 @@ export default function PinPage() {
       {/* User Info */}
       <Avatar src="https://dummyimage.com/200x200/999/fff" sx={{ width: 80, height: 80, mb: 1 }} />
       <Typography variant="h6">Interview User</Typography>
-      {/* <Typography
-        variant="body2"
-        color="error"
-        sx={{ display: pin.length === 6 ? "block" : "none", mt: 1 }}
-      >
-        Invalid PIN Code. You have 3 attempts left.
-      </Typography> */}
 
       {/* PIN Dots */}
       <Box display="flex" justifyContent="center" gap={1} my={2}>
